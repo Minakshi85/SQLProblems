@@ -44,7 +44,7 @@ insert into customer_orders values(1,100,cast('2022-01-01' as date),2000),(2,200
 ,(7,100,cast('2022-01-03' as date),3000),(8,400,cast('2022-01-03' as date),1000),(9,600,cast('2022-01-03' as date),3000);
 
 
- with cte as 
+Q1 : with cte as 
 (select customer_id, min(order_date) as min_date
 from Customer_orders
 group by customer_id)
@@ -58,6 +58,7 @@ from customer_orders o
 inner join cte
 on cte.customer_id = o.customer_id
 group by order_date
+
 
 
 
