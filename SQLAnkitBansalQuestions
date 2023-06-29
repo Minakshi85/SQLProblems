@@ -59,6 +59,38 @@ inner join cte
 on cte.customer_id = o.customer_id
 group by order_date
 
+// Problem 3 : resource used in office with total visited and most visited floors
+create table entries ( 
+name varchar(20),
+address varchar(20),
+email varchar(20),
+floor int,
+resources varchar(10));
+
+insert into entries 
+values ('A','Bangalore','A@gmail.com',1,'CPU'),('A','Bangalore','A1@gmail.com',1,'CPU'),('A','Bangalore','A2@gmail.com',2,'DESKTOP')
+,('B','Bangalore','B@gmail.com',2,'DESKTOP'),('B','Bangalore','B1@gmail.com',2,'DESKTOP'),('B','Bangalore','B2@gmail.com',1,'MONITOR')
+
+with floor_visits as
+(
+Select name, floor, count(1) as most_visited_floor,
+rank() over(partition by name order by count(1) desc) as rn
+from entries
+group by name, floor),
+
+total_visits as
+(
+Select name,  count(1) as total_visits, string.agg(resources,', ') as resources_used
+from entries
+group by name
+)
+
+Select fv.name, tv.total_visits, fv.floor as most_visited_floor, tv.resources_used
+from floor_visits as fv
+inner join total_visits as tv
+on fv.name = tv.name
+where fv.rn =1
+
 
 
 
