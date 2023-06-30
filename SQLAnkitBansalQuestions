@@ -246,6 +246,14 @@ from users u
 left join ranking r on u.user_id = seller_id AND rn =2
 left join items i on i.item_id = r.item_id
 
+// tricky SQL Problem , fail/success 
+create table tasks (
+date_value date,
+state varchar(10)
+);
+
+insert into tasks  values ('2019-01-01','success'),('2019-01-02','success'),('2019-01-03','success'),('2019-01-04','fail')
+,('2019-01-05','fail'),('2019-01-06','success')
 
 
 
