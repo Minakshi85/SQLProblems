@@ -255,5 +255,20 @@ state varchar(10)
 insert into tasks  values ('2019-01-01','success'),('2019-01-02','success'),('2019-01-03','success'),('2019-01-04','fail')
 ,('2019-01-05','fail'),('2019-01-06','success')
 
+Q1. with seqn as
+(
+Select *,
+row_number() over(order by date_value) as id,
+row_number() over(partition by state order by date_value ) as seq, 
+(row_number() over(order by date_value)  - row_number() over(partition by state order by date_value )) as diff
+from tasks
+order by date_value asc
+)
+
+Select min(date_value) as start_date, max(date_value) as end_date, state
+from seqn
+group by state, diff
+order by min(date_value)
+
 
 
