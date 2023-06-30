@@ -91,6 +91,100 @@ inner join total_visits as tv
 on fv.name = tv.name
 where fv.rn =1
 
+//Problem 4 : Leet code hard proble : calculate cancellation rate for unbanned users
+Create table  Trips (id int, client_id int, driver_id int, city_id int, status varchar(50), request_at varchar(50));
+Create table Users (users_id int, banned varchar(50), role varchar(50));
+
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('1', '1', '10', '1', 'completed', '2013-10-01');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('2', '2', '11', '1', 'cancelled_by_driver', '2013-10-01');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('3', '3', '12', '6', 'completed', '2013-10-01');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('4', '4', '13', '6', 'cancelled_by_client', '2013-10-01');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('5', '1', '10', '1', 'completed', '2013-10-02');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('6', '2', '11', '6', 'completed', '2013-10-02');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('7', '3', '12', '6', 'completed', '2013-10-02');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('8', '2', '12', '12', 'completed', '2013-10-03');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('9', '3', '10', '12', 'completed', '2013-10-03');
+insert into Trips (id, client_id, driver_id, city_id, status, request_at) values ('10', '4', '13', '12', 'cancelled_by_driver', '2013-10-03');
+
+insert into Users (users_id, banned, role) values ('1', 'No', 'client');
+insert into Users (users_id, banned, role) values ('2', 'Yes', 'client');
+insert into Users (users_id, banned, role) values ('3', 'No', 'client');
+insert into Users (users_id, banned, role) values ('4', 'No', 'client');
+insert into Users (users_id, banned, role) values ('10', 'No', 'driver');
+insert into Users (users_id, banned, role) values ('11', 'No', 'driver');
+insert into Users (users_id, banned, role) values ('12', 'No', 'driver');
+insert into Users (users_id, banned, role) values ('13', 'No', 'driver');
+
+
+with trip as
+(
+Select t.*
+from Trips t
+inner join users u
+on t.client_id = u.users_id
+inner join users d
+on t.driver_id = d.users_id
+where u.banned = 'No' AND d.banned ='No')
+
+Select request_at,
+(1.0*SUM(CASE WHEN status LIKE 'cancelled%' THEN 1 ELSE 0 END)/ count(*))*100 as cancelled_percent
+from trip
+group by request_at;
+
+// Problem 5 : Leet code Hard problem : Tournament Winner
+create table players
+(player_id int,
+group_id int);
+
+insert into players values (15,1);
+insert into players values (25,1);
+insert into players values (30,1);
+insert into players values (45,1);
+insert into players values (10,2);
+insert into players values (35,2);
+insert into players values (50,2);
+insert into players values (20,3);
+insert into players values (40,3);
+
+create table matches
+(
+match_id int,
+first_player int,
+second_player int,
+first_score int,
+second_score int);
+
+insert into matches values (1,15,45,3,0);
+insert into matches values (2,30,25,1,2);
+insert into matches values (3,30,15,2,0);
+insert into matches values (4,40,20,5,2);
+insert into matches values (5,35,50,1,1);
+
+with score as
+(
+select first_player as player_id, first_score as score from matches
+union
+select second_player as player_id, second_score as score from matches
+),
+
+total_score as
+(
+select s.player_id, p.group_id, sum(score) as total_score
+from score s 
+inner join players p
+on p.player_id = s.player_id
+group by s.player_id, group_id),
+
+ranking as
+(
+select *, 
+rank() over(partition by group_id order by total_score desc, player_id asc) as rn
+from total_score
+)
+
+Select * from ranking 
+where rn =1;
+
 
 
 
