@@ -47,7 +47,7 @@ inner join cte
 on cte.customer_id = o.customer_id
 group by order_date
 
-// Problem 3 : resource used in office with total visited and most visited floors
+-- Problem 3 : resource used in office with total visited and most visited floors
 create table entries ( 
 name varchar(20),
 address varchar(20),
@@ -72,7 +72,7 @@ Select fv.name, tv.total_visits, fv.floor as most_visited_floor, tv.resources_us
 inner join total_visits as tv
 on fv.name = tv.name where fv.rn =1
 
-//Problem 4 : Leet code hard proble : calculate cancellation rate for unbanned users
+ -- Problem 4 : Leet code hard proble : calculate cancellation rate for unbanned users
 Create table  Trips (id int, client_id int, driver_id int, city_id int, status varchar(50), request_at varchar(50));
 Create table Users (users_id int, banned varchar(50), role varchar(50));
 
@@ -256,9 +256,8 @@ group by ds1.department_id )
 
 Select * from final
 where dep_salary < comp_salary
-
-// Leetcode Hard Problem | User Purchase Platform
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* Leetcode Hard Problem | User Purchase Platform */
 create table spending 
 (
 user_id int,
@@ -289,6 +288,16 @@ union all
 select distinct (spend_date), 0 as amt, null as user_id,'both' as device	from spending
 )
 select  spend_date,	device,	sum(amt) as spend, count(distinct user_id) as cnt from cte group by spend_date, device order by spend_date, device desc
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* Customer Churn and Retention Ananlysis */
+create table transactions(
+order_id int,
+cust_id int,
+order_date date,
+amount int
+);
+delete from transactions;
+insert into transactions values 
+(1,1,'2020-01-15',150),(2,1,'2020-02-10',150),(3,2,'2020-01-16',150),(4,2,'2020-02-25',150),(5,3,'2020-01-10',150),(6,3,'2020-02-20',150),(7,4,'2020-01-20',150),(8,5,'2020-02-20',150);
 
 
