@@ -1,5 +1,4 @@
--- Problem 1 Solution
-
+/* Problem 1 Solution */
 Q1 : Select team,sum(no_of_wins) + sum(no_of_losses) as total_match,  sum(no_of_wins) as won, sum(no_of_losses) as lost
 from
 (
@@ -20,8 +19,8 @@ select team_2 as team, case when team_2 =winner then 1 else 0 end  as 'no_of_win
 )
 group by team
 order by won desc
-
---- Problem 2 Find repeat customers and new customers
+/* ========================================================================================================================================================================================================================*/
+/* Problem 2 Find repeat customers and new customers */
 Insert and create Statement
 create table customer_orders (
 order_id integer,
@@ -46,8 +45,8 @@ from customer_orders o
 inner join cte
 on cte.customer_id = o.customer_id
 group by order_date
-
--- Problem 3 : resource used in office with total visited and most visited floors
+/*====================================================================================================================================================================================================================*/
+/* Problem 3 : resource used in office with total visited and most visited floors */
 create table entries ( 
 name varchar(20),
 address varchar(20),
@@ -71,8 +70,8 @@ total_visits as
 Select fv.name, tv.total_visits, fv.floor as most_visited_floor, tv.resources_used from floor_visits as fv
 inner join total_visits as tv
 on fv.name = tv.name where fv.rn =1
-
- -- Problem 4 : Leet code hard proble : calculate cancellation rate for unbanned users
+/* ==================================================================================================================================================================================================================*/
+/* Problem 4 : Leet code hard proble : calculate cancellation rate for unbanned users */
 Create table  Trips (id int, client_id int, driver_id int, city_id int, status varchar(50), request_at varchar(50));
 Create table Users (users_id int, banned varchar(50), role varchar(50));
 
@@ -106,8 +105,8 @@ Select request_at,
 (1.0*SUM(CASE WHEN status LIKE 'cancelled%' THEN 1 ELSE 0 END)/ count(*))*100 as cancelled_percent
 from trip
 group by request_at;
-
-// Problem 5 : Leet code Hard problem : Tournament Winner
+/*======================================================================================================================================================================================================================*/
+/* Problem 5 : Leet code Hard problem : Tournament Winner*/
 create table players
 (player_id int,
 group_id int);
@@ -144,8 +143,8 @@ ranking as
 
 Select * from ranking 
 where rn =1;
-
-//Problem 6 : Leetcode Hard Problem 3 | Market Analysis 2
+/*=====================================================================================================================================================================================================================*/
+/*Problem 6 : Leetcode Hard Problem 3 | Market Analysis 2*/
 create table users (
 user_id         int     ,
  join_date       date    ,
@@ -172,7 +171,7 @@ user_id         int     ,
 
  insert into orders values (1,'2019-08-01',4,1,2),(2,'2019-08-02',2,1,3),(3,'2019-08-03',3,2,3),(4,'2019-08-04',1,4,2) ,(5,'2019-08-04',1,3,4),(6,'2019-08-05',2,2,4);
 
-Q1. with ranking as
+/*Q1.*/ with ranking as
 (
 Select *,
 rank() over(partition by seller_id order by order_date) as rn
@@ -187,11 +186,9 @@ inner join items i
 on i.item_id = r.item_id
 where rn =2)
 
-select  u.user_id, CASE WHEN item_brand = favorite_brand then 'yes' else 'no' end  as 'fav_brand' from users u
-left join fav_brand
-on u.user_id = seller_id
+select  u.user_id, CASE WHEN item_brand = favorite_brand then 'yes' else 'no' end  as 'fav_brand' from users u left join fav_brand on u.user_id = seller_id
 
-Q2. with ranking as
+/*Q2.*/ with ranking as
 (
 Select *,
 rank() over(partition by seller_id order by order_date) as rn
@@ -202,8 +199,8 @@ CASE WHEN item_brand = favorite_brand then 'yes' else 'no' end  as 'fav_brand'
 from users u
 left join ranking r on u.user_id = seller_id AND rn =2
 left join items i on i.item_id = r.item_id
-
-// tricky SQL Problem , fail/success 
+/*=======================================================================================================================================================================================================================*/
+/* tricky SQL Problem , fail/success */
 create table tasks (
 date_value date,
 state varchar(10)
@@ -211,7 +208,7 @@ state varchar(10)
 
 insert into tasks  values ('2019-01-01','success'),('2019-01-02','success'),('2019-01-03','success'),('2019-01-04','fail'),('2019-01-05','fail'),('2019-01-06','success')
 
-Q1. with seqn as
+/*Q1.*/ with seqn as
 (
 Select *,
 row_number() over(order by date_value) as id,
@@ -225,8 +222,8 @@ Select min(date_value) as start_date, max(date_value) as end_date, state
 from seqn
 group by state, diff
 order by min(date_value)
-
-// PayPal SQL Interview problem. This is very advanced SQL problem.
+/*=======================================================================================================================================================================================================================*/
+/* PayPal SQL Interview problem. This is very advanced SQL problem.*/
 create table emp(
 emp_id int,
 emp_name varchar(20),
@@ -256,7 +253,7 @@ group by ds1.department_id )
 
 Select * from final
 where dep_salary < comp_salary
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Leetcode Hard Problem | User Purchase Platform */
 create table spending 
 (
@@ -269,9 +266,7 @@ amount int
 insert into spending values(1,'2019-07-01','mobile',100),(1,'2019-07-01','desktop',100),(2,'2019-07-01','mobile',100),(2,'2019-07-02','mobile',100),(3,'2019-07-01','desktop',100),(3,'2019-07-02','desktop',100);
 
 with cte as
-(
-Select spend_date, sum(amount) as amt ,user_id, CASE WHEN count(distinct platform) = 1 then platform ElSE 'both' END device from spending group by spend_date, user_id
-)
+(Select spend_date, sum(amount) as amt ,user_id, CASE WHEN count(distinct platform) = 1 then platform ElSE 'both' END device from spending group by spend_date, user_id)
 select * from 
 (
 select  spend_date,	device,	sum(amt) as spend, count(*) as cnt from cte group by spend_date, device
