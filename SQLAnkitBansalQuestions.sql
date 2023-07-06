@@ -275,7 +275,7 @@ select distinct (spend_date),	'both' as device,	0 as spend, 0 as cnt from spendi
 )
 group by spend_date, device
 order by spend_date, device desc
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 with cte as
 (
 Select spend_date, sum(amount) as amt ,user_id, CASE WHEN count(distinct platform) = 1 then platform ElSE 'both' END device from spending group by spend_date, user_id
@@ -283,7 +283,7 @@ union all
 select distinct (spend_date), 0 as amt, null as user_id,'both' as device	from spending
 )
 select  spend_date,	device,	sum(amt) as spend, count(distinct user_id) as cnt from cte group by spend_date, device order by spend_date, device desc
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Customer Churn and Retention Ananlysis */
 create table transactions(
 order_id int,
@@ -295,4 +295,22 @@ delete from transactions;
 insert into transactions values 
 (1,1,'2020-01-15',150),(2,1,'2020-02-10',150),(3,2,'2020-01-16',150),(4,2,'2020-02-25',150),(5,3,'2020-01-10',150),(6,3,'2020-02-20',150),(7,4,'2020-01-20',150),(8,5,'2020-02-20',150);
 
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Leetcode Hard SQL Problem - 6 | Second Most Recent Activity or First activity in case there is no second activity*/
+
+create table UserActivity
+(
+username      varchar(20) ,
+activity      varchar(20),
+startDate     Date   ,
+endDate      Date
+);
+
+insert into UserActivity values ('Alice','Travel','2020-02-12','2020-02-20'),('Alice','Dancing','2020-02-21','2020-02-23'),('Alice','Travel','2020-02-24','2020-02-28'),('Bob','Travel','2020-02-11','2020-02-18');
+
+with cte as
+(  select *, count(*) over(partition by username) as cnt, row_number() over(partition by username order by startDate) as rn from UserActivity )
+
+Select * from cte where rn =2 or cnt =1
+/***************************************************************************************************************************************************************************************************************************/
 
