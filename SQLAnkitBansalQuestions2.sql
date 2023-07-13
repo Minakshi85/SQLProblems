@@ -35,3 +35,8 @@ Create table emp (emp_id int, emp_name varchar(20), dep_id varchar(10), salary i
 
 insert into Emp values (1,'Ankit',100,10000,4),(2,'Mohit',100,15000,5),(3,'Vikas',100,10000,4),(4,'Rohit',100,5000,2),(5,'Mudit',200,12000,6),(6,'Angam',200,12000,2),(7,'Sanjay',200,9000,2),(8,'Ashish',200,5000,2),(1,'Saubrabh',900,12000,2)
 /* Find duplicates in a given table */
+Select emp_id, count(emp_id) from Emp group by emp_id having count(emp_id) >1 ;
+/* How to delete duplicates*/
+with cte as (Select *, row_number() over(partition by emp_id order by emp_id) as rn from Emp )
+delete from cte where rn >1
+/*Union and Union all */
