@@ -19,4 +19,19 @@ select seat_no from cte where curr= 3 OR prev= 3 OR next=3
 
 
 
-/*===============================================================================================================================================================================================================================*/
+/*============================================================================================================================================================================================================================*/
+/*Solving an SQL Puzzle */
+create table input (
+id int, formula varchar(10),value int)
+insert into input values (1,'1+4',10),(2,'2+1',5),(3,'3-2',40),(4,'4-1',20);
+
+with cte as ( select id, value,formula,substring (formula, 2,1) as operation, substring (formula, 3,1) as id2 from input)
+
+Select c1.id, c1.formula,c1.value, CASE WHEN c1.operation = "+" THEN c1.value + c2. value ELSE c1.value -c2.value END as new_value
+from cte c1 inner join cte c2 on c1.id2 = c2.id
+/*============================================================================================================================================================================================================================*/
+/*Top 10 SQL interview Questions and Answers | Frequently asked SQL interview questions.*/
+Create table emp (emp_id int, emp_name varchar(20), dep_id varchar(10), salary int, manager_id varcar(10));
+
+insert into Emp values (1,'Ankit',100,10000,4),(2,'Mohit',100,15000,5),(3,'Vikas',100,10000,4),(4,'Rohit',100,5000,2),(5,'Mudit',200,12000,6),(6,'Angam',200,12000,2),(7,'Sanjay',200,9000,2),(8,'Ashish',200,5000,2),(1,'Saubrabh',900,12000,2)
+/* Find duplicates in a given table */
